@@ -15,44 +15,12 @@ class ArticleView(ListAPIView):
     queryset = ArticleModel.objects.all()
     
     def get(self, request):
-        # print(self.request.GET.get('temp'))
-        self.pagination_class = PostPageNumberPagination2
-        queryset = self.filter_queryset(self.get_queryset())
-        pages = self.paginate_queryset(queryset)
-
+        if self.request.GET.get('temp') == 're':
+            self.pagination_class = PostPageNumberPagination2
+        # queryset = self.filter_queryset(self.get_queryset())
+        pages = self.paginate_queryset(self.get_queryset())
         serializer = self.get_serializer(pages, many=True)
-
         return self.get_paginated_response(serializer.data)
-    
-    # def get_queryset(self):
-        
-    #     print(self.request.GET.get('temp',''))
-    #     return
-    
-    # def filter_queryset(self, queryset):
-    #     filter_backends = [CategoryFilter]
-
-    #     if 'geo_route' in self.request.query_params:
-    #         filter_backends = [GeoRouteFilter, CategoryFilter]
-    #     elif 'geo_point' in self.request.query_params:
-    #         filter_backends = [GeoPointFilter, CategoryFilter]
-
-    #     for backend in list(filter_backends):
-    #         queryset = backend().filter_queryset(self.request, queryset, view=self)
-
-    #     return queryset
-
-    
-    # def list(self, request):
-    #     # temp = request.GET.get('temp', '')
-    #     # if temp == 'temp':
-    #         # return ArticleModel.objects.all().order_by('title')
-    #     queryset = self.get_queryset()
-    #     slz = ArticleSerializer(queryset, many=True)
-    #     return Response(slz.data)
-    #     # articles = ArticleModel.objects.all()
-    #     # serializer = ArticleSerializer(articles, many=True).data
-    #     # return Response(serializer, status=status.HTTP_200_OK)
     
     def post(self, request):
         serializer = ArticleSerializer(data=request.data)

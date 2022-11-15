@@ -1,5 +1,4 @@
 from rest_framework.views import APIView
-from rest_framework.generics import ListCreateAPIView
 from rest_framework import status
 from rest_framework.response import Response
 from articles.serializers import ArticleSerializer
@@ -24,6 +23,7 @@ class ArticleView(ListAPIView):
         serializer = self.get_serializer(pages, many=True)
 
         return self.get_paginated_response(serializer.data)
+    
     # def get_queryset(self):
         
     #     print(self.request.GET.get('temp',''))

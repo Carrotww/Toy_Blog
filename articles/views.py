@@ -7,6 +7,7 @@ from rest_framework import permissions
 from rest_framework.decorators import permission_classes
 from articles.paginations import PostPageNumberPagination, PostPageNumberPagination2
 from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
 
 @permission_classes((permissions.AllowAny,))
 class ArticleView(ListAPIView):

@@ -10,7 +10,7 @@ class PostPageNumberPagination(CursorPagination):
 
 class PostPageNumberPagination2(CursorPagination):
     page_size = 4
-    ordering = 'title'
+    ordering = '-created_at'
     # cursor_query_param = 'page'
     # max_page_size = 50
     # page_query_param = 'p'

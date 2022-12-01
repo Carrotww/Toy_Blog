@@ -1,16 +1,22 @@
-"""
-ASGI config for testpro project.
-
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/4.1/howto/deployment/asgi/
-"""
-
 import os
 
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
+import chats.routing
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "testpro.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "testpro.settings")	# mysite 는 django 프로젝트 이름
+# Initialize Django ASGI application early to ensure the AppRegistry
+# is populated before importing code that may import ORM models.
 
-application = get_asgi_application()
+application = ProtocolTypeRouter({
+    # 서버 연결시 protocaltyperouter 가 연결의 종류를 탐색
+  "http": get_asgi_application(),
+  # http일 시 get_asgi_application 실행
+  "websocket": AuthMiddlewareStack(
+            URLRouter(
+                chats.routing.websocket_urlpatterns	# chat 은 routing.py 가 들어있는 앱 이름
+            )
+        )
+})

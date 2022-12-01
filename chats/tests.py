@@ -1,3 +1,10 @@
-from django.test import TestCase
+import pytest
+from channels.testing import HttpCommunicator
+from chats.consumers import ChatConsumer
 
-# Create your tests here.
+@pytest.mark.asyncio
+async def test_my_consumer():
+    communicator = HttpCommunicator(ChatConsumer.as_asgi(), "GET", "/test/")
+    response = await communicator.get_response()
+    assert response["body"] == b"test response"
+    assert response["status"] == 200
